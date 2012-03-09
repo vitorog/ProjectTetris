@@ -36,27 +36,18 @@ GameObjComponent* GameObject::get_component(ComponentType type) {
 	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
 		return m_components[RENDERER_COMPONENT];
 	}
-
+	return nullptr;
 }
 
 void GameObject::render() {
 	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
 		RendererComponent* renderer_cmp = dynamic_cast<RendererComponent*>(m_components[RENDERER_COMPONENT]);
-		renderer_cmp->render();
-		if(has_children()){
-			std::list<GameObject*>::iterator it;
-
-			glPushMatrix();
-			//glLoadIdentity();
-			float aux = 0.0f;
-			for(it = m_children.begin(); it != m_children.end(); it++){
-				glScalef(0.95f,0.95f,1.0f);
-				glColor3f(0.0f + aux,0.0f,0.0f);
-				(*it)->render();
-				aux+=0.1;
-			}
-			glPopMatrix();
-			glColor3f(1.0f,1.0f,1.0f);
+		renderer_cmp->render(m_center, 1.0f, m_color);
+	}
+	if(has_children()){
+		std::list<GameObject*>::iterator it;
+		for(it = m_children.begin(); it != m_children.end(); it++){
+			(*it)->render();
 		}
 	}
 }
@@ -64,6 +55,13 @@ void GameObject::render() {
 bool GameObject::has_children() {
 	return (m_children.size() != 0) ? true : false;
 }
+
+void Point3::operator=(const Point3& point) {
+	this->x = point.x;
+	this->y = point.y;
+	this->z = point.z;
+}
+
 
 
 

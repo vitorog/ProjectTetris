@@ -53,10 +53,10 @@ int VideoManager::initGL() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	double ratio = (double)m_screen_width/(double)m_screen_height;
-	gluPerspective(45.0f, ratio ,0.01f,10.0f);
+	gluPerspective(45.0f, ratio ,0.01f,100.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0.0f,0.0f,3.0f,0.0f,0.0f,-1.0f,0.0f,1.0f,0.0f);
+	gluLookAt(0.0f,0.0f,25.0f,0.0f,0.0f,-1.0f,0.0f,1.0f,0.0f);
 	return 0;
 }
 

@@ -28,11 +28,7 @@ private:
 	void addGameObj(GameObject* obj);
 	void removeGameObj(GameObject* obj);
 
-	TetrisPiece* createTetrisPiece();
-	TetrisBlock* createTetrisBlock();
-
-
-
+	void createTetrisPiece();
 
 
 	bool m_running;

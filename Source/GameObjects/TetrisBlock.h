@@ -12,8 +12,9 @@
 
 class TetrisBlock : public GameObject {
 public:
-	TetrisBlock();
+	TetrisBlock(Point3 position, Point3 color);
 	virtual ~TetrisBlock();
+
 };
 
 #endif /* TETRISBLOCK_H_ */

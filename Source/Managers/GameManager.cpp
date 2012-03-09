@@ -16,15 +16,6 @@ GameManager::GameManager() {
 	m_running = true;
 	m_video_mng = VideoManager::getInstance();
 	m_video_mng->setupVideo();
-
-	TetrisPiece* new_piece = createTetrisPiece();
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
-	new_piece->addChild(createTetrisBlock());
 }
 
 GameManager::~GameManager() {
@@ -38,10 +29,19 @@ GameManager::~GameManager() {
 }
 
 void GameManager::run() {
+	int i = 0;
 	while(m_running){
+		GameObject* tetris_piece = new TetrisPiece(i);
+		addGameObj(tetris_piece);
 		input(event);
 		logic();
 		render();
+		m_game_objs_list.clear();
+		i++;
+		if(i  > 6){
+			i = 0;
+		}
+		SDL_Delay(500);
 	}
 }
 
@@ -67,8 +67,6 @@ GameManager* GameManager::getInstance() {
 void GameManager::render() {
 	m_video_mng->clearScreen();
 	std::list<GameObject*>::iterator it;
-	GameObject *curr_object = nullptr;
-	RendererComponent *renderer = nullptr;
 	for(it = m_game_objs_list.begin(); it != m_game_objs_list.end(); it++){
 		(*it)->render();
 	}
@@ -83,20 +81,12 @@ void GameManager::removeGameObj(GameObject* obj) {
 }
 
 
-TetrisPiece* GameManager::createTetrisPiece() {
-	GameObject* tetris_piece = new TetrisPiece();
-	RendererComponent* renderer = new RendererComponent();
-	tetris_piece->addComponent(renderer);
+void GameManager::createTetrisPiece() {
+	GameObject* tetris_piece = new TetrisPiece(6);
 	addGameObj(tetris_piece);
-	return dynamic_cast<TetrisPiece*>(tetris_piece);
+	//return dynamic_cast<TetrisPiece*>(tetris_piece);
 }
 
-TetrisBlock* GameManager::createTetrisBlock() {
-	GameObject* tetris_block = new TetrisBlock();
-	RendererComponent* renderer = new RendererComponent();
-	tetris_block->addComponent(renderer);
-	return dynamic_cast<TetrisBlock*>(tetris_block);
-}
 
 
 

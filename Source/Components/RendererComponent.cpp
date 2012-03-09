@@ -16,12 +16,14 @@ RendererComponent::~RendererComponent() {
 	// TODO Auto-generated destructor stub
 }
 
-void RendererComponent::render() {
+void RendererComponent::render(Point3 center, float size, Point3 color) {
+	float hsize = size/2;
+	glColor3f(color.x,color.y,color.z);
 	glBegin(GL_QUADS);
-		glVertex3f(-1.0f,-1.0f,0.0f);
-		glVertex3f(1.0f,-1.0f,0.0f);
-		glVertex3f(1.0f,1.0f,0.0f);
-		glVertex3f(-1.0f,1.0f,0.0f);
+		glVertex3f(center.x - hsize, center.y - hsize, center.z );
+		glVertex3f(center.x + hsize, center.y - hsize, center.z );
+		glVertex3f(center.x + hsize, center.y + hsize, center.z );
+		glVertex3f(center.x - hsize, center.y + hsize, center.z );
 	glEnd();
 }
 

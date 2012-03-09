@@ -7,9 +7,9 @@
 
 #include "TetrisBlock.h"
 
-TetrisBlock::TetrisBlock() {
-	// TODO Auto-generated constructor stub
-
+TetrisBlock::TetrisBlock(Point3 position, Point3 color) {
+	m_center = position;
+	m_color = color;
 }
 
 TetrisBlock::~TetrisBlock() {
