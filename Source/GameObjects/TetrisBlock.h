@@ -10,9 +10,10 @@
 
 #include "GameObject.h"
 
+
 class TetrisBlock : public GameObject {
 public:
-	TetrisBlock(Point3 position, Point3 color);
+	TetrisBlock(Point3 position);
 	virtual ~TetrisBlock();
 
 };

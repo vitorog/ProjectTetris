@@ -12,14 +12,17 @@
 #include "../Managers/VideoManager.h"
 #include "GameObjComponent.h"
 
+#include "MeshComponent.h"
+#include "MaterialComponent.h"
+#include "../ObjectFrame.h"
+
 class Point3;
 
 class RendererComponent: public GameObjComponent {
 public:
 	RendererComponent();
 	virtual ~RendererComponent();
-
-	void render(Point3 center, float size, Point3 color);
+	void render(const ObjectFrame& frame, MeshComponent *mesh, MaterialComponent *material = nullptr);
 };
 
 #endif /* RENDERERCOMPONENT_H_ */

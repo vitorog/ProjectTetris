@@ -8,7 +8,7 @@
 #ifndef GAMEOBJCOMPONENT_H_
 #define GAMEOBJCOMPONENT_H_
 
-typedef enum ComponentType_t { RENDERER_COMPONENT = 0 }ComponentType;
+typedef enum ComponentType_t { RENDERER_COMPONENT = 0, MESH_COMPONENT, MATERIAL_COMPONENT }ComponentType;
 
 class GameObjComponent {
 public:
