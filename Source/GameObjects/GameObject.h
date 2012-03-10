@@ -31,6 +31,7 @@ protected:
 	std::list<GameObject*> m_children;
 	std::map<ComponentType, GameObjComponent*> m_components;
 	ObjectFrame m_frame;
+	Point3 m_translate;
 };
 
 #endif /* GAMEOBJECT_H_ */

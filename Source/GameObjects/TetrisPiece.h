@@ -13,6 +13,8 @@
 #include "GameObject.h"
 #include "TetrisBlock.h"
 
+#define MOVE_DISTANCE 1.0f
+
 typedef enum TetrisPieceType_t {
 	TETRIS_SQUARE_PIECE = 0,
 	TETRIS_LINE_PIECE,
@@ -23,14 +25,24 @@ typedef enum TetrisPieceType_t {
 	TETRIS_T_PIECE
 }TetrisPieceType;
 
+typedef enum TetrisPieceDirection_t {
+	LEFT = 0,
+	RIGHT,
+	UP,
+	DOWN
+}TetrisPieceDirection;
+
 class TetrisPiece : public GameObject {
 public:
 	TetrisPiece(int type);
 	virtual ~TetrisPiece();
 	void createBlocks();
+	void movePiece(TetrisPieceDirection dir);
 private:
+	void move(int x, int y);
 	std::vector<TetrisBlock*> m_blocks;
 	int m_type;
+
 };
 
 #endif /* TETRISPIECE_H_ */

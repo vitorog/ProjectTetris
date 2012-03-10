@@ -32,6 +32,8 @@ void GameManager::run() {
 	int i = 0;
 	while(m_running){
 		GameObject* tetris_piece = new TetrisPiece(i);
+		TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
+		tp->movePiece(DOWN);
 		addGameObj(tetris_piece);
 		input(event);
 		logic();

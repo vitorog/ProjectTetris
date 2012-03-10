@@ -81,4 +81,29 @@ void TetrisPiece::createBlocks() {
 	}
 }
 
+void TetrisPiece::movePiece(TetrisPieceDirection dir) {
+	switch(dir){
+	case LEFT:
+		move(-MOVE_DISTANCE,0.0f);
+		break;
+	case RIGHT:
+		move(MOVE_DISTANCE,0.0f);
+		break;
+	case UP:
+		move(0.0f,MOVE_DISTANCE);
+		break;
+	case DOWN:
+		move(0.0f,-MOVE_DISTANCE);
+		break;
+	default:
+		break;
+	}
+}
+
+void TetrisPiece::move(int x, int y) {
+	m_translate.x += x;
+	m_translate.y += y;
+}
+
+
 

@@ -38,6 +38,9 @@ void GameObject::addComponent(GameObjComponent* component) {
 	if(MeshComponent* mesh = dynamic_cast<MeshComponent*>(component)){
 		m_components[MESH_COMPONENT] = mesh;
 	}
+	if(MaterialComponent* material = dynamic_cast<MaterialComponent*>(component)){
+		m_components[MATERIAL_COMPONENT] = material;
+	}
 
 }
 
@@ -53,6 +56,8 @@ GameObjComponent* GameObject::get_component(ComponentType type) {
 }
 
 void GameObject::render() {
+	glPushMatrix();
+	glTranslatef(m_translate.x,m_translate.y,m_translate.z);
 	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
 		RendererComponent* renderer_cmp = dynamic_cast<RendererComponent*>(m_components[RENDERER_COMPONENT]);
 		if(m_components.find(MESH_COMPONENT) != m_components.end()){
@@ -70,6 +75,7 @@ void GameObject::render() {
 			(*it)->render();
 		}
 	}
+	glPopMatrix();
 }
 
 bool GameObject::has_children() {

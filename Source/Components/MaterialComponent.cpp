@@ -7,12 +7,19 @@
 
 #include "MaterialComponent.h"
 
-MaterialComponent::MaterialComponent() {
-	// TODO Auto-generated constructor stub
-
+MaterialComponent::MaterialComponent(Point3 color) {
+	m_color = color;
 }
 
 MaterialComponent::~MaterialComponent() {
-	// TODO Auto-generated destructor stub
 }
+
+Point3 MaterialComponent::getColor() {
+	return m_color;
+}
+
+bool MaterialComponent::hasTexture() {
+	return m_textured;
+}
+
 

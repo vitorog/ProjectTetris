@@ -13,7 +13,7 @@
 
 class TetrisBlock : public GameObject {
 public:
-	TetrisBlock(Point3 position);
+	TetrisBlock(Point3 position, float size = 1.0f);
 	virtual ~TetrisBlock();
 
 };

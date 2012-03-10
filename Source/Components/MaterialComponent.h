@@ -8,10 +8,18 @@
 #ifndef MATERIALCOMPONENT_H_
 #define MATERIALCOMPONENT_H_
 
-class MaterialComponent {
+#include "GameObjComponent.h"
+#include "../ObjectFrame.h"
+
+class MaterialComponent : public GameObjComponent{
 public:
-	MaterialComponent();
+	MaterialComponent(Point3 color);
 	virtual ~MaterialComponent();
+	Point3 getColor();
+	bool hasTexture();
+private:
+	Point3 m_color;
+	bool m_textured;
 };
 
 #endif /* MATERIALCOMPONENT_H_ */
