@@ -13,7 +13,7 @@
 #include "GameObject.h"
 #include "TetrisBlock.h"
 
-#define MOVE_DISTANCE 0.01f
+#define MOVE_DISTANCE 1.0f
 
 typedef enum TetrisPieceType_t {
 	TETRIS_SQUARE_PIECE = 0,

@@ -41,6 +41,7 @@ void GameManager::run() {
 		input(event);
 		logic();
 		render();
+		SDL_Delay(50);
 	}
 }
 
@@ -48,6 +49,7 @@ void GameManager::logic() {
 }
 
 void GameManager::input(SDL_Event event) {
+
 	checkQuit(event);
 	m_input_mng->handleInput(event);
 	if(m_input_mng->checkKey("DOWN"))
