@@ -9,9 +9,10 @@
 
 #include <iostream>
 
-GameObject::GameObject(int id) {
-	m_id = id;
+int GameObject::m_id = 0;
 
+GameObject::GameObject() {
+	m_id++;
 }
 
 GameObject::~GameObject() {
@@ -51,7 +52,7 @@ void GameObject::addChild(GameObject* obj) {
 	m_children.push_back(obj);
 }
 
-GameObjComponent* GameObject::get_component(ComponentType type) {
+GameObjComponent* GameObject::getComponent(ComponentType type) {
 	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
 		return m_components[RENDERER_COMPONENT];
 	}
@@ -74,16 +75,15 @@ void GameObject::render() {
 	}
 	glPopMatrix();
 
-	if(has_children()){
+	if(hasChildren()){
 		std::list<GameObject*>::iterator it;
 		for(it = m_children.begin(); it != m_children.end(); it++){
 			(*it)->render();
 		}
 	}
-
 }
 
-bool GameObject::has_children() {
+bool GameObject::hasChildren() {
 	return (m_children.size() != 0) ? true : false;
 }
 
