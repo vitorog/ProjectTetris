@@ -9,6 +9,8 @@
 #define GAMEMANAGER_H_
 
 #include "VideoManager.h"
+#include "InputManager.h"
+
 #include "../GameObjects/GameObject.h"
 #include "../GameObjects/TetrisBlock.h"
 #include "../GameObjects/TetrisPiece.h"
@@ -27,13 +29,15 @@ private:
 	void render();
 	void addGameObj(GameObject* obj);
 	void removeGameObj(GameObject* obj);
+	void checkQuit(SDL_Event event);
 
 	void createTetrisPiece();
-
+	TetrisPiece* m_curr_piece;
 
 	bool m_running;
 	static GameManager* m_game_mng;
 	VideoManager* m_video_mng;
+	InputManager* m_input_mng;
 	std::list<GameObject*> m_game_objs_list;
 };
 

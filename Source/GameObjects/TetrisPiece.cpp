@@ -81,7 +81,7 @@ void TetrisPiece::createBlocks() {
 	}
 }
 
-void TetrisPiece::movePiece(TetrisPieceDirection dir) {
+void TetrisPiece::moveDir(TetrisPieceDirection dir) {
 	switch(dir){
 	case LEFT:
 		move(-MOVE_DISTANCE,0.0f);
@@ -100,7 +100,7 @@ void TetrisPiece::movePiece(TetrisPieceDirection dir) {
 	}
 }
 
-void TetrisPiece::move(int x, int y) {
+void TetrisPiece::move(float x, float y) {
 	m_translate.x += x;
 	m_translate.y += y;
 }

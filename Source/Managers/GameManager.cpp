@@ -16,6 +16,9 @@ GameManager::GameManager() {
 	m_running = true;
 	m_video_mng = VideoManager::getInstance();
 	m_video_mng->setupVideo();
+
+	m_input_mng = InputManager::getInstance();
+
 }
 
 GameManager::~GameManager() {
@@ -30,20 +33,14 @@ GameManager::~GameManager() {
 
 void GameManager::run() {
 	int i = 0;
+	GameObject* tetris_piece = new TetrisPiece(i);
+	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
+	m_curr_piece = tp;
+	addGameObj(tetris_piece);
 	while(m_running){
-		GameObject* tetris_piece = new TetrisPiece(i);
-		TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
-		tp->movePiece(DOWN);
-		addGameObj(tetris_piece);
 		input(event);
 		logic();
 		render();
-		m_game_objs_list.clear();
-		i++;
-		if(i  > 6){
-			i = 0;
-		}
-		SDL_Delay(500);
 	}
 }
 
@@ -51,12 +48,29 @@ void GameManager::logic() {
 }
 
 void GameManager::input(SDL_Event event) {
-	//Move this to input manager later
-	while(SDL_PollEvent(&event)){
-		if(event.type == SDL_QUIT){
-			m_running = false;
-		}
+	checkQuit(event);
+	m_input_mng->handleInput(event);
+	if(m_input_mng->checkKey("DOWN"))
+	{
+		m_curr_piece->moveDir(DOWN);
 	}
+	if(m_input_mng->checkKey("UP"))
+		{
+			m_curr_piece->moveDir(UP);
+		}
+	if(m_input_mng->checkKey("LEFT"))
+		{
+			m_curr_piece->moveDir(LEFT);
+		}
+	if(m_input_mng->checkKey("RIGHT"))
+		{
+			m_curr_piece->moveDir(RIGHT);
+		}
+	if(m_input_mng->checkKey("SPACE"))
+	{
+		m_running = false;
+	}
+
 }
 
 GameManager* GameManager::getInstance() {
@@ -82,6 +96,14 @@ void GameManager::addGameObj(GameObject* obj) {
 void GameManager::removeGameObj(GameObject* obj) {
 }
 
+
+void GameManager::checkQuit(SDL_Event event) {
+//	//if(SDL_PeepEvents(&event,1,SDL_PEEKEVENT,)){
+//		if(event.type == SDL_QUIT){
+//				m_running = false;
+//		}
+//	}
+}
 
 void GameManager::createTetrisPiece() {
 	GameObject* tetris_piece = new TetrisPiece(6);
