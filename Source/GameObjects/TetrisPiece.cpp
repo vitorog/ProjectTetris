@@ -18,9 +18,9 @@ TetrisPiece::~TetrisPiece() {
 }
 
 void TetrisPiece::createBlocks() {
-	Point3 center =  m_frame.getCenter();
-	Point3 position[4] = { center, center, center, center };
-	Point3 color[4];
+	glm::vec3 center =  m_frame.getCenter();
+	glm::vec3 position[4] = { center, center, center, center };
+	glm::vec3 color[4];
 	color[0].x = 1.0f;
 
 	color[1].y = 1.0f;
@@ -76,7 +76,6 @@ void TetrisPiece::createBlocks() {
 	}
 	for(unsigned int i = 0; i < 4; i++){
 		TetrisBlock* new_block = new TetrisBlock(position[i]);
-		m_blocks.push_back(new_block);
 		m_children.push_back(new_block);
 	}
 }
@@ -101,8 +100,16 @@ void TetrisPiece::moveDir(TetrisPieceDirection dir) {
 }
 
 void TetrisPiece::move(float x, float y) {
-	m_translate.x += x;
-	m_translate.y += y;
+	m_frame.translate(glm::vec3(x,y,0));
+	std::list<GameObject*>::iterator it;
+	TetrisBlock* curr_block = nullptr;
+	for(it = m_children.begin(); it != m_children.end(); it++)
+	{
+		curr_block = dynamic_cast<TetrisBlock*>((*it));
+		if(curr_block != nullptr){
+			curr_block->getFrame().translate(glm::vec3(x,y,0));
+		}
+	}
 }
 
 

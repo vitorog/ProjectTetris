@@ -7,7 +7,10 @@
 
 #include "GameObject.h"
 
-GameObject::GameObject() {
+#include <iostream>
+
+GameObject::GameObject(int id) {
+	m_id = id;
 
 }
 
@@ -57,7 +60,7 @@ GameObjComponent* GameObject::get_component(ComponentType type) {
 
 void GameObject::render() {
 	glPushMatrix();
-	glTranslatef(m_translate.x,m_translate.y,m_translate.z);
+	glMultMatrixf(glm::value_ptr(m_frame.getTransformationMatrix()));
 	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
 		RendererComponent* renderer_cmp = dynamic_cast<RendererComponent*>(m_components[RENDERER_COMPONENT]);
 		if(m_components.find(MESH_COMPONENT) != m_components.end()){
@@ -69,18 +72,30 @@ void GameObject::render() {
 			renderer_cmp->render(this->m_frame,mesh_cmp);
 		}
 	}
+	glPopMatrix();
+
 	if(has_children()){
 		std::list<GameObject*>::iterator it;
 		for(it = m_children.begin(); it != m_children.end(); it++){
 			(*it)->render();
 		}
 	}
-	glPopMatrix();
+
 }
 
 bool GameObject::has_children() {
 	return (m_children.size() != 0) ? true : false;
 }
+
+int GameObject::getId() {
+	return m_id;
+}
+
+ObjectFrame& GameObject::getFrame() {
+	return m_frame;
+}
+
+
 
 
 

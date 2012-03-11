@@ -19,12 +19,16 @@ public:
 	virtual ~InputManager();
 	void handleInput(SDL_Event event);
 	bool checkKey(std::string key);
+	bool checkQuitApp();
 	static InputManager* getInstance();
 private:
 	void handleKeyPresses(SDL_Event event);
 	void handleKeyReleases(SDL_Event event);
 	static InputManager* m_input_mng_ptr;
 	std::set<std::string> m_keys_set;
+	bool m_quit;
+	bool m_disable_key_hold;
+
 };
 
 #endif /* INPUTMANAGER_H_ */

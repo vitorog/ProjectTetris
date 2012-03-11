@@ -16,7 +16,6 @@
 #include "MaterialComponent.h"
 #include "../ObjectFrame.h"
 
-class Point3;
 
 class RendererComponent: public GameObjComponent {
 public:

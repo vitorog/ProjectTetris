@@ -11,8 +11,8 @@
 InputManager* InputManager::m_input_mng_ptr = nullptr;
 
 InputManager::InputManager() {
-	// TODO Auto-generated constructor stub
-
+	m_quit = false;
+	m_disable_key_hold = true;
 }
 
 InputManager::~InputManager() {
@@ -20,7 +20,13 @@ InputManager::~InputManager() {
 }
 
 void InputManager::handleInput(SDL_Event event) {
+	if(m_disable_key_hold){
+		m_keys_set.clear();
+	}
 	if(SDL_PollEvent(&event)){
+		if(event.type == SDL_QUIT){
+			m_quit = true;
+		}
 		if(event.type == SDL_KEYDOWN){
 			handleKeyPresses(event);
 		}
@@ -83,6 +89,11 @@ void InputManager::handleKeyReleases(SDL_Event event) {
 	default:
 		break;
 	}
+}
+
+bool InputManager::checkQuitApp()
+{
+	return m_quit;
 }
 
 

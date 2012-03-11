@@ -8,6 +8,9 @@
 #include "GameManager.h"
 
 
+#define FRAMES_PER_SECOND 60
+#define DROP_TIME 500
+
 GameManager* GameManager::m_game_mng = nullptr;
 
 SDL_Event event;
@@ -19,6 +22,9 @@ GameManager::GameManager() {
 
 	m_input_mng = InputManager::getInstance();
 
+	m_fps_timer = new Timer();
+	m_drop_timer = new Timer();
+
 }
 
 GameManager::~GameManager() {
@@ -29,19 +35,23 @@ GameManager::~GameManager() {
 		it = m_game_objs_list.erase(it);
 		delete curr_obj;
 	}
+	delete m_fps_timer;
+	delete m_drop_timer;
 }
 
 void GameManager::run() {
-	int i = 0;
-	GameObject* tetris_piece = new TetrisPiece(i);
+	GameObject* tetris_piece = new TetrisPiece(0);
 	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
 	m_curr_piece = tp;
 	addGameObj(tetris_piece);
+	m_drop_timer->start();
 	while(m_running){
+		m_fps_timer->start();
 		input(event);
 		logic();
 		render();
-		SDL_Delay(50);
+		manageDropPiece();
+		manageFps();
 	}
 }
 
@@ -50,7 +60,10 @@ void GameManager::logic() {
 
 void GameManager::input(SDL_Event event) {
 
-	checkQuit(event);
+	if(m_input_mng->checkQuitApp()){
+		m_running = false;
+		return;
+	}
 	m_input_mng->handleInput(event);
 	if(m_input_mng->checkKey("DOWN"))
 	{
@@ -95,28 +108,26 @@ void GameManager::addGameObj(GameObject* obj) {
 	m_game_objs_list.push_back(obj);
 }
 
-void GameManager::removeGameObj(GameObject* obj) {
+void GameManager::manageFps() {
+	if(m_fps_timer->getElapsed() < (1000 / FRAMES_PER_SECOND))
+	{
+			SDL_Delay((1000 / FRAMES_PER_SECOND) - m_fps_timer->getElapsed());
+	}
 }
 
-
-void GameManager::checkQuit(SDL_Event event) {
-//	//if(SDL_PeepEvents(&event,1,SDL_PEEKEVENT,)){
-//		if(event.type == SDL_QUIT){
-//				m_running = false;
-//		}
-//	}
+void GameManager::manageDropPiece() {
+	if(m_drop_timer->getElapsed() > DROP_TIME){
+		m_curr_piece->moveDir(DOWN);
+		m_drop_timer->start();
+	}
 }
 
-void GameManager::createTetrisPiece() {
-	GameObject* tetris_piece = new TetrisPiece(6);
-	addGameObj(tetris_piece);
-	//return dynamic_cast<TetrisPiece*>(tetris_piece);
+void GameManager::removeGameObj(int id) {
+	std::list<GameObject*>::iterator it;
+	for(it = m_game_objs_list.begin(); it != m_game_objs_list.end(); it++){
+		if((*it)->getId() == id){
+			m_game_objs_list.erase(it);
+			return;
+		}
+	}
 }
-
-
-
-
-
-
-
-

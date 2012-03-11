@@ -19,19 +19,20 @@
 
 class GameObject {
 public:
-	GameObject();
+	GameObject(int id = -1);
 	virtual ~GameObject();
 	void addComponent(GameObjComponent* component);
 	void addChild(GameObject* obj);
 	void render();
 	GameObjComponent* get_component(ComponentType type);
 	bool has_children();
-
+	int getId();
+	ObjectFrame& getFrame();
 protected:
 	std::list<GameObject*> m_children;
 	std::map<ComponentType, GameObjComponent*> m_components;
 	ObjectFrame m_frame;
-	Point3 m_translate;
+	int m_id;
 };
 
 #endif /* GAMEOBJECT_H_ */

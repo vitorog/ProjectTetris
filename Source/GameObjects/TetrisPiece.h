@@ -40,7 +40,6 @@ public:
 	void moveDir(TetrisPieceDirection dir);
 private:
 	void move(float x, float y);
-	std::vector<TetrisBlock*> m_blocks;
 	int m_type;
 
 };

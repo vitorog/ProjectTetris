@@ -19,8 +19,8 @@ RendererComponent::~RendererComponent() {
 
 
 void RendererComponent::render(const ObjectFrame& frame, MeshComponent* mesh, MaterialComponent* material) {
-	std::vector<Point3> vertices;
-	std::vector<Point3>::iterator verts_it;
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3>::iterator verts_it;
 
 //	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 //	glBegin(GL_QUADS);
@@ -34,7 +34,7 @@ void RendererComponent::render(const ObjectFrame& frame, MeshComponent* mesh, Ma
 
 	glBegin(GL_QUADS);
 	if(material != nullptr){
-		Point3 color = material->getColor();
+		glm::vec3 color = material->getColor();
 		glColor3f(color.x,color.y,color.z);
 	}
 	vertices = mesh->getVertices();

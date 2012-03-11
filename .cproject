@@ -29,6 +29,7 @@
 								<option id="gnu.cpp.compiler.option.other.other.1528785610" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0 -std=c++0x" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.paths.849796336" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;E:\Dev\Libs\SDL-1.2.15\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;E:\Dev\Libs\glm-0.9.3.1&quot;"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.preprocessor.def.1930249007" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="nullptr=0"/>
@@ -143,4 +144,5 @@
 			</profile>
 		</scannerConfigBuildInfo>
 	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 </cproject>

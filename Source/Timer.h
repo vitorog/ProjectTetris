@@ -10,10 +10,18 @@
 
 #include <SDL/SDL_timer.h>
 
-class TimeManager {
+class Timer {
 public:
-	TimeManager();
-	virtual ~TimeManager();
+	Timer();
+	virtual ~Timer();
+	void start();
+	void pause();
+	unsigned int getElapsed();
+	void restart();
+
+private:
+	unsigned int m_time;
+	bool m_paused;
 };
 
 #endif /* TIMEMANAGER_H_ */

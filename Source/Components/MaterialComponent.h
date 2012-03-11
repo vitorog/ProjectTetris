@@ -13,12 +13,12 @@
 
 class MaterialComponent : public GameObjComponent{
 public:
-	MaterialComponent(Point3 color);
+	MaterialComponent(glm::vec3 color);
 	virtual ~MaterialComponent();
-	Point3 getColor();
+	glm::vec3 getColor();
 	bool hasTexture();
 private:
-	Point3 m_color;
+	glm::vec3 m_color;
 	bool m_textured;
 };
 

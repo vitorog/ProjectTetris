@@ -7,14 +7,14 @@
 
 #include "MaterialComponent.h"
 
-MaterialComponent::MaterialComponent(Point3 color) {
+MaterialComponent::MaterialComponent(glm::vec3 color) {
 	m_color = color;
 }
 
 MaterialComponent::~MaterialComponent() {
 }
 
-Point3 MaterialComponent::getColor() {
+glm::vec3 MaterialComponent::getColor() {
 	return m_color;
 }
 

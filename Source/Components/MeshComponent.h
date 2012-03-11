@@ -16,10 +16,10 @@ class MeshComponent : public GameObjComponent {
 public:
 	MeshComponent();
 	virtual ~MeshComponent();
-	void setMesh(const std::vector<Point3>& vertices);
-	std::vector<Point3>& getVertices();
+	void setMesh(const std::vector<glm::vec3>& vertices);
+	std::vector<glm::vec3>& getVertices();
 public:
-	std::vector<Point3> m_vertices;
+	std::vector<glm::vec3> m_vertices;
 };
 
 #endif /* MESHCOMPONENT_H_ */
