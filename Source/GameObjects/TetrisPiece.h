@@ -36,17 +36,19 @@ class TetrisBlock;
 
 class TetrisPiece : public GameObject {
 public:
-	TetrisPiece(int type, glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
+	TetrisPiece(TetrisPieceType type, glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
 	virtual ~TetrisPiece();
 	void createBlocks();
-	void moveDir(TetrisPieceDirection dir);
+	void movePiece(TetrisPieceDirection dir);
+	void rotatePiece(TetrisPieceDirection dir);
 	bool checkCollision(GameObject* object);
 	void setMaterial(glm::vec3 test);
 	TetrisBlock* getTetrisBlock(int pos);
-	void printCenter();
 private:
 	void move(float x, float y);
+	void rotate(float angle, glm::vec3 axis);
 	int m_type;
+	float m_rotated_angle;
 
 };
 

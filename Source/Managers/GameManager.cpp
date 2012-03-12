@@ -40,11 +40,11 @@ GameManager::~GameManager() {
 }
 
 void GameManager::run() {
-	GameObject* tetris_piece2 = new TetrisPiece(0, glm::vec3(5.0f,0.0f,0.0f));
+	GameObject* tetris_piece2 = new TetrisPiece(TETRIS_SQUARE_PIECE, glm::vec3(5.0f,0.0f,0.0f));
 	addGameObj(tetris_piece2);
 
 
-	GameObject* tetris_piece = new TetrisPiece(0);
+	GameObject* tetris_piece = new TetrisPiece(TETRIS_T_PIECE);
 	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
 	m_curr_piece = tp;
 	addGameObj(tetris_piece);
@@ -79,24 +79,24 @@ void GameManager::input(SDL_Event event) {
 	m_input_mng->handleInput(event);
 	if(m_input_mng->checkKey("DOWN"))
 	{
-		m_curr_piece->moveDir(DOWN);
+		m_curr_piece->movePiece(DOWN);
 
 	}
 	if(m_input_mng->checkKey("UP"))
 		{
-			m_curr_piece->moveDir(UP);
+			m_curr_piece->movePiece(UP);
 		}
 	if(m_input_mng->checkKey("LEFT"))
 		{
-			m_curr_piece->moveDir(LEFT);
+			m_curr_piece->movePiece(LEFT);
 		}
 	if(m_input_mng->checkKey("RIGHT"))
 		{
-			m_curr_piece->moveDir(RIGHT);
+			m_curr_piece->movePiece(RIGHT);
 		}
 	if(m_input_mng->checkKey("SPACE"))
 	{
-		m_running = false;
+		m_curr_piece->rotatePiece(RIGHT);
 	}
 
 }

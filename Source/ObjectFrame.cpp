@@ -9,6 +9,8 @@
 
 ObjectFrame::ObjectFrame() {
 	m_transformation_matrix = glm::mat4();
+	m_rotate_vec = glm::vec3(0.0f,0.0f,1.0f);
+	m_last_angle = 0.0f;
 }
 
 void ObjectFrame::setCenter(glm::vec3 position) {
@@ -32,12 +34,16 @@ void ObjectFrame::setTransformationMatrix(glm::mat4x4& transformation_matrix) {
 }
 
 void ObjectFrame::translate(glm::vec3 direction) {
+	m_transformation_matrix = glm::rotate(m_transformation_matrix, -m_last_angle, m_rotate_vec);
 	m_transformation_matrix = glm::translate(m_transformation_matrix,direction);
+	m_transformation_matrix = glm::rotate(m_transformation_matrix, m_last_angle, m_rotate_vec);
 	updateCenter();
 
 }
 
 void ObjectFrame::rotate(float angle, glm::vec3 axis) {
+	m_rotate_vec = axis;
+	m_last_angle += angle;
 	m_transformation_matrix = glm::rotate(m_transformation_matrix,angle,axis);
 	updateCenter();
 }
@@ -58,6 +64,11 @@ void ObjectFrame::updateCenter()
 	m_center.y = aux_center.y;
 	m_center.z = aux_center.z;
 }
+
+void ObjectFrame::resetRotation() {
+
+}
+
 
 
 

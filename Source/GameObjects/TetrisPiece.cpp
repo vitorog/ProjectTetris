@@ -14,13 +14,11 @@
 
 #define TETRIS_BLOCK_SIZE 1.0f
 
-TetrisPiece::TetrisPiece(int type, glm::vec3 position) {
+TetrisPiece::TetrisPiece(TetrisPieceType type, glm::vec3 position) {
 	m_type = type;
 	m_frame.setCenter(position);
-	std::cout << "Center: " << std::endl;
-	std::cout << position.x << " " << position.y << " " << std::endl;
 	createBlocks();
-	std::cout << std::endl;
+	m_rotated_angle = 0;
 }
 
 TetrisPiece::~TetrisPiece() {
@@ -89,7 +87,7 @@ void TetrisPiece::createBlocks() {
 	}
 }
 
-void TetrisPiece::moveDir(TetrisPieceDirection dir) {
+void TetrisPiece::movePiece(TetrisPieceDirection dir) {
 	switch(dir){
 	case LEFT:
 		move(-MOVE_DISTANCE,0.0f);
@@ -105,6 +103,35 @@ void TetrisPiece::moveDir(TetrisPieceDirection dir) {
 		break;
 	default:
 		break;
+	}
+}
+
+void TetrisPiece::rotatePiece(TetrisPieceDirection dir) {
+	switch(dir){
+		case LEFT:
+			m_rotated_angle += -90.0f;
+			if(m_type <= 3){
+				if(m_rotated_angle < 90.0f){
+					rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
+					m_rotated_angle = 0.0f;
+					break;
+				}
+			}
+			rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
+			break;
+		case RIGHT:
+			m_rotated_angle += 90.0f;
+			if(m_type <= 3){
+				if(m_rotated_angle > 90.0f){
+					rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
+					m_rotated_angle = 0.0f;
+					break;
+				}
+			}
+			rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
+			break;
+		default:
+			break;
 	}
 }
 
@@ -176,7 +203,22 @@ TetrisBlock* TetrisPiece::getTetrisBlock(int pos)
 	return nullptr;
 }
 
+void TetrisPiece::rotate(float angle, glm::vec3 axis) {
+	m_frame.rotate(angle,axis);
+	CollisionComponent* collision_cmp = nullptr;
+	std::list<GameObject*>::iterator it;
+	TetrisBlock* curr_block = nullptr;
+	for(it = m_children.begin(); it != m_children.end(); it++)
+	{
+		curr_block = dynamic_cast<TetrisBlock*>((*it));
+		if(curr_block != nullptr){
+			curr_block->getFrame().applyTransformation(this->getFrame().getTransformationMatrix());
+			collision_cmp = dynamic_cast<CollisionComponent*>(curr_block->getComponent(COLLISION_COMPONENT));
+			if(collision_cmp != nullptr){
+				collision_cmp->updateBoundingBox();
+			}
 
-void TetrisPiece::printCenter(){
-	std::cout << m_frame.getCenter().x << " " << m_frame.getCenter().y << " " << std::endl;
+		}
+	}
 }
+

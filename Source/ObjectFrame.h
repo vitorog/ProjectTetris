@@ -23,8 +23,11 @@ public:
 	void rotate(float angle, glm::vec3 axis);
 private:
 	void updateCenter();
+	void resetRotation();
 	glm::vec3 m_center;
 	glm::vec3 m_translate_vec;
+	glm::vec3 m_rotate_vec;
+	float m_last_angle;
 	glm::mat4x4 m_transformation_matrix;
 };
 
