@@ -40,11 +40,16 @@ GameManager::~GameManager() {
 }
 
 void GameManager::run() {
+	GameObject* tetris_piece2 = new TetrisPiece(0, glm::vec3(5.0f,0.0f,0.0f));
+	addGameObj(tetris_piece2);
+
+
 	GameObject* tetris_piece = new TetrisPiece(0);
 	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
 	m_curr_piece = tp;
 	addGameObj(tetris_piece);
 	m_drop_timer->start();
+
 	while(m_running){
 		m_fps_timer->start();
 		input(event);
@@ -56,6 +61,13 @@ void GameManager::run() {
 }
 
 void GameManager::logic() {
+	if(checkCollision()){
+		m_curr_piece->setMaterial(glm::vec3(1.0f,0.0f,0.0f));
+		std::cout << "COLLILDED" << std::endl;
+	}else{
+		m_curr_piece->setMaterial(glm::vec3(0.0f,0.0f,1.0f));
+		std::cout << "NOT COLLILDED" << std::endl;
+	}
 }
 
 void GameManager::input(SDL_Event event) {
@@ -68,6 +80,7 @@ void GameManager::input(SDL_Event event) {
 	if(m_input_mng->checkKey("DOWN"))
 	{
 		m_curr_piece->moveDir(DOWN);
+
 	}
 	if(m_input_mng->checkKey("UP"))
 		{
@@ -105,7 +118,7 @@ void GameManager::render() {
 }
 
 void GameManager::addGameObj(GameObject* obj) {
-	m_game_objs_list.push_back(obj);
+	m_game_objs_list.push_front(obj);
 }
 
 void GameManager::manageFps() {
@@ -117,7 +130,7 @@ void GameManager::manageFps() {
 
 void GameManager::manageDropPiece() {
 	if(m_drop_timer->getElapsed() > DROP_TIME){
-		m_curr_piece->moveDir(DOWN);
+		//m_curr_piece->moveDir(DOWN);
 		m_drop_timer->start();
 	}
 }
@@ -130,4 +143,16 @@ void GameManager::removeGameObj(int id) {
 			return;
 		}
 	}
+}
+
+bool GameManager::checkCollision(){
+	std::list<GameObject*>::iterator it;
+	it = m_game_objs_list.begin();
+	std::advance(it,1);
+	for(; it != m_game_objs_list.end(); it++){
+		if(m_curr_piece->checkCollision((*it))){
+			return true;
+		}
+	}
+	return false;
 }

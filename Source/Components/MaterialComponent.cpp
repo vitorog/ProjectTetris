@@ -22,4 +22,9 @@ bool MaterialComponent::hasTexture() {
 	return m_textured;
 }
 
+void MaterialComponent::setMaterial(glm::vec3 color) {
+	m_color = color;
+}
+
+
 

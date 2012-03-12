@@ -11,7 +11,6 @@
 #include <vector>
 
 #include "GameObject.h"
-#include "TetrisBlock.h"
 
 #define MOVE_DISTANCE 1.0f
 
@@ -32,12 +31,19 @@ typedef enum TetrisPieceDirection_t {
 	DOWN
 }TetrisPieceDirection;
 
+
+class TetrisBlock;
+
 class TetrisPiece : public GameObject {
 public:
-	TetrisPiece(int type);
+	TetrisPiece(int type, glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
 	virtual ~TetrisPiece();
 	void createBlocks();
 	void moveDir(TetrisPieceDirection dir);
+	bool checkCollision(GameObject* object);
+	void setMaterial(glm::vec3 test);
+	TetrisBlock* getTetrisBlock(int pos);
+	void printCenter();
 private:
 	void move(float x, float y);
 	int m_type;

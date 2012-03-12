@@ -10,12 +10,11 @@
 
 #include "../Components/GameObjComponent.h"
 #include "../Components/RendererComponent.h"
+#include "../Components/CollisionComponent.h"
+#include "../ObjectFrame.h"
 
 #include <list>
 #include <map>
-
-#include "../ObjectFrame.h"
-
 
 class GameObject {
 public:
@@ -23,6 +22,7 @@ public:
 	virtual ~GameObject();
 	void addComponent(GameObjComponent* component);
 	void addChild(GameObject* obj);
+	std::list<GameObject*>* getChildren();
 	void render();
 	GameObjComponent* getComponent(ComponentType type);
 	bool hasChildren();

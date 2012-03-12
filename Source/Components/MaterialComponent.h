@@ -9,7 +9,8 @@
 #define MATERIALCOMPONENT_H_
 
 #include "GameObjComponent.h"
-#include "../ObjectFrame.h"
+
+#include "../utils.h"
 
 class MaterialComponent : public GameObjComponent{
 public:
@@ -17,6 +18,7 @@ public:
 	virtual ~MaterialComponent();
 	glm::vec3 getColor();
 	bool hasTexture();
+	void setMaterial(glm::vec3 color);
 private:
 	glm::vec3 m_color;
 	bool m_textured;

@@ -8,9 +8,9 @@
 #ifndef MESHCOMPONENT_H_
 #define MESHCOMPONENT_H_
 
-#include <vector>
-#include "../ObjectFrame.h"
+
 #include "GameObjComponent.h"
+#include "../utils.h"
 
 class MeshComponent : public GameObjComponent {
 public:

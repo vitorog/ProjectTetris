@@ -7,13 +7,52 @@
 
 #include "CollisionComponent.h"
 
-CollisionComponent::CollisionComponent(glm::vec3 position)
-	: m_collision_box(position,1.0f)
-{
 
+#include "../GameObjects/GameObject.h"
+#include "../ObjectFrame.h"
+
+CollisionComponent::CollisionComponent(ObjectFrame *frame){
+	m_obj_frame = frame;
+	m_bounding_box.setBoundaries(frame->getCenter(),1.0f);
 }
 
 CollisionComponent::~CollisionComponent() {
 	// TODO Auto-generated destructor stub
 }
+
+
+bool CollisionComponent::checkCollision(GameObject* object) {
+	CollisionComponent* compare_collision_cmp = dynamic_cast<CollisionComponent*>(object->getComponent(COLLISION_COMPONENT));
+	if(compare_collision_cmp != nullptr){
+		BoundingBox2d* compare_bbox = compare_collision_cmp->getBoundingBox();
+		if(compare_bbox != nullptr){
+			if(m_bounding_box.isPointInside(compare_bbox->getCenter())){
+				return true;
+			}else{
+				for(int i = 0; i < 4; i++){
+					if(m_bounding_box.isPointInside(compare_bbox->getBorderPoint(i))){
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void CollisionComponent::updateBoundingBox(){
+	m_bounding_box.setBoundaries(m_obj_frame->getCenter());
+}
+
+BoundingBox2d* CollisionComponent::getBoundingBox() {
+	return &m_bounding_box;
+}
+
+
+
+
+
+
+
+
 

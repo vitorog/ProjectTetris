@@ -35,6 +35,7 @@ private:
 	void addGameObj(GameObject* obj);
 	void removeGameObj(int id);
 	TetrisPiece* m_curr_piece;
+	bool checkCollision();
 
 	bool m_running;
 	static GameManager* m_game_mng;

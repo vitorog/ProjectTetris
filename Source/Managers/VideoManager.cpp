@@ -41,6 +41,7 @@ SDL_Surface* VideoManager::getScreen()
 
 int VideoManager::initSDL() {
 	int ret =  SDL_Init(SDL_INIT_VIDEO);
+
 	if(ret < 0)
 	{
 		std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;

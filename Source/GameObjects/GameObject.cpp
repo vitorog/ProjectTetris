@@ -9,6 +9,9 @@
 
 #include <iostream>
 
+#include "../Components/CollisionComponent.h"
+
+
 int GameObject::m_id = 0;
 
 GameObject::GameObject() {
@@ -45,6 +48,9 @@ void GameObject::addComponent(GameObjComponent* component) {
 	if(MaterialComponent* material = dynamic_cast<MaterialComponent*>(component)){
 		m_components[MATERIAL_COMPONENT] = material;
 	}
+	if(CollisionComponent* collision = dynamic_cast<CollisionComponent*>(component)){
+		m_components[COLLISION_COMPONENT] = collision;
+	}
 
 }
 
@@ -53,8 +59,8 @@ void GameObject::addChild(GameObject* obj) {
 }
 
 GameObjComponent* GameObject::getComponent(ComponentType type) {
-	if(m_components.find(RENDERER_COMPONENT) != m_components.end()){
-		return m_components[RENDERER_COMPONENT];
+	if(m_components.find(type) != m_components.end()){
+		return m_components[type];
 	}
 	return nullptr;
 }
@@ -89,6 +95,10 @@ bool GameObject::hasChildren() {
 
 int GameObject::getId() {
 	return m_id;
+}
+
+std::list<GameObject*>* GameObject::getChildren() {
+	return &m_children;
 }
 
 ObjectFrame& GameObject::getFrame() {

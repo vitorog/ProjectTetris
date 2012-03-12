@@ -8,9 +8,7 @@
 #ifndef OBJECTFRAME_H_
 #define OBJECTFRAME_H_
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "utils.h"
 
 class ObjectFrame {
 public:
@@ -19,12 +17,14 @@ public:
 	void setCenter(glm::vec3 position);
 	glm::vec3 getCenter();
 	glm::mat4x4& getTransformationMatrix();
+	void applyTransformation(glm::mat4x4& transformation_matrix);
 	void setTransformationMatrix(glm::mat4x4& transformation_matrix);
 	void translate(glm::vec3 direction);
 	void rotate(float angle, glm::vec3 axis);
 private:
 	void updateCenter();
 	glm::vec3 m_center;
+	glm::vec3 m_translate_vec;
 	glm::mat4x4 m_transformation_matrix;
 };
 

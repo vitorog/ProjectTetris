@@ -7,11 +7,20 @@
 
 #include "TetrisPiece.h"
 
+#include "TetrisBlock.h"
+#include "../Components/CollisionComponent.h"
+
+#include <iterator>
+
 #define TETRIS_BLOCK_SIZE 1.0f
 
-TetrisPiece::TetrisPiece(int type) {
+TetrisPiece::TetrisPiece(int type, glm::vec3 position) {
 	m_type = type;
+	m_frame.setCenter(position);
+	std::cout << "Center: " << std::endl;
+	std::cout << position.x << " " << position.y << " " << std::endl;
 	createBlocks();
+	std::cout << std::endl;
 }
 
 TetrisPiece::~TetrisPiece() {
@@ -101,16 +110,73 @@ void TetrisPiece::moveDir(TetrisPieceDirection dir) {
 
 void TetrisPiece::move(float x, float y) {
 	m_frame.translate(glm::vec3(x,y,0));
+	CollisionComponent* collision_cmp = nullptr;
 	std::list<GameObject*>::iterator it;
 	TetrisBlock* curr_block = nullptr;
 	for(it = m_children.begin(); it != m_children.end(); it++)
 	{
 		curr_block = dynamic_cast<TetrisBlock*>((*it));
 		if(curr_block != nullptr){
-			curr_block->getFrame().translate(glm::vec3(x,y,0));
+			curr_block->getFrame().applyTransformation(this->getFrame().getTransformationMatrix());
+			collision_cmp = dynamic_cast<CollisionComponent*>(curr_block->getComponent(COLLISION_COMPONENT));
+			if(collision_cmp != nullptr){
+				collision_cmp->updateBoundingBox();
+			}
+
 		}
 	}
 }
 
+bool TetrisPiece::checkCollision(GameObject* object)
+{
+	std::list<GameObject*>* children = object->getChildren();
+	std::list<GameObject*>::iterator other_it;
+	TetrisBlock* block = nullptr;
+	if( children->size() > 0){
+		for(int i = 0; i < 4; i++){
+			block = this->getTetrisBlock(i);
+			for(other_it = children->begin(); other_it != children->end(); other_it++){
+				if(block != nullptr){
+					if(block->checkCollision((*other_it))){
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+void TetrisPiece::setMaterial(glm::vec3 test){
+	MaterialComponent* material_cmp = dynamic_cast<MaterialComponent*>(getComponent(MATERIAL_COMPONENT));
+	if(material_cmp != nullptr){
+		material_cmp->setMaterial(test);
+	}
+	std::list<GameObject*>::iterator it;
+	for(it = m_children.begin(); it != m_children.end(); it++){
+		material_cmp = dynamic_cast<MaterialComponent*>((*it)->getComponent(MATERIAL_COMPONENT));
+		if(material_cmp != nullptr){
+				material_cmp->setMaterial(test);
+		}
+	}
+}
+
+TetrisBlock* TetrisPiece::getTetrisBlock(int pos)
+{
+	std::list<GameObject*>::iterator it;
+	it = m_children.begin();
+	std::advance(it, pos);
+	TetrisBlock* block = nullptr;
+	if(it != m_children.end()){
+		block = dynamic_cast<TetrisBlock*>((*it));
+		if(block != nullptr){
+			return block;
+		}
+	}
+	return nullptr;
+}
 
 
+void TetrisPiece::printCenter(){
+	std::cout << m_frame.getCenter().x << " " << m_frame.getCenter().y << " " << std::endl;
+}
