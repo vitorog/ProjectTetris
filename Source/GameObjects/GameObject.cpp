@@ -105,6 +105,25 @@ ObjectFrame& GameObject::getFrame() {
 	return m_frame;
 }
 
+void GameObject::applyTransformMatrix() {
+	CollisionComponent* collision_cmp = nullptr;
+	std::list<GameObject*>::iterator it;
+	GameObject* curr_obj = nullptr;
+	for(it = m_children.begin(); it != m_children.end(); it++)
+	{
+		curr_obj = (*it);
+		if(curr_obj != nullptr){
+			curr_obj->getFrame().applyTransformation(this->getFrame().getTransformationMatrix());
+			collision_cmp = dynamic_cast<CollisionComponent*>(curr_obj->getComponent(COLLISION_COMPONENT));
+			if(collision_cmp != nullptr){
+				collision_cmp->updateBoundingBox();
+			}
+
+		}
+	}
+}
+
+
 
 
 

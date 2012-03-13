@@ -7,7 +7,12 @@
 
 #include "ObjectFrame.h"
 
+#include <iostream>
+
+
 ObjectFrame::ObjectFrame() {
+	m_translation_matrix = glm::mat4();
+	m_rotation_matrix = glm::mat4();
 	m_transformation_matrix = glm::mat4();
 	m_rotate_vec = glm::vec3(0.0f,0.0f,1.0f);
 	m_last_angle = 0.0f;
@@ -34,9 +39,8 @@ void ObjectFrame::setTransformationMatrix(glm::mat4x4& transformation_matrix) {
 }
 
 void ObjectFrame::translate(glm::vec3 direction) {
-	m_transformation_matrix = glm::rotate(m_transformation_matrix, -m_last_angle, m_rotate_vec);
-	m_transformation_matrix = glm::translate(m_transformation_matrix,direction);
-	m_transformation_matrix = glm::rotate(m_transformation_matrix, m_last_angle, m_rotate_vec);
+	m_translation_matrix = glm::translate(m_translation_matrix,direction);
+	updateTransformationMatrix();
 	updateCenter();
 
 }
@@ -44,7 +48,23 @@ void ObjectFrame::translate(glm::vec3 direction) {
 void ObjectFrame::rotate(float angle, glm::vec3 axis) {
 	m_rotate_vec = axis;
 	m_last_angle += angle;
-	m_transformation_matrix = glm::rotate(m_transformation_matrix,angle,axis);
+
+	float sin_angle = sin((angle*PI)/180);
+	float cos_angle = cos((angle*PI)/180);
+	if(fabs(sin_angle) > 0.999999){
+		sin_angle = 1.0f;
+	}
+	if(fabs(cos_angle) < 0.000001){
+		cos_angle = 0.0f;
+	}
+	glm::mat4 rotation_matrix =
+			glm::mat4(glm::vec4(cos_angle,sin_angle,0.0f,0.0f),
+					glm::vec4(-sin_angle,cos_angle,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+	);
+	m_rotation_matrix = m_rotation_matrix * rotation_matrix;
+	updateTransformationMatrix();
 	updateCenter();
 }
 
@@ -65,9 +85,36 @@ void ObjectFrame::updateCenter()
 	m_center.z = aux_center.z;
 }
 
-void ObjectFrame::resetRotation() {
-
+void ObjectFrame::resetRotation()
+{
+	m_rotation_matrix = glm::mat4();
+	m_last_angle = 0;
+	updateTransformationMatrix();
+	updateCenter();
 }
+
+void ObjectFrame::updateTransformationMatrix() {
+	m_transformation_matrix = m_translation_matrix * m_rotation_matrix;
+}
+
+glm::mat4x4& ObjectFrame::getRotationMatrix() {
+	return m_rotation_matrix;
+}
+
+glm::mat4x4& ObjectFrame::getTranslationMatrix() {
+	return m_translation_matrix;
+}
+
+void ObjectFrame::printTransformationMatrix() {
+	std::cout << "Matrix: " << std::endl;
+	glm::vec4 row;
+	for(int i = 0; i < 4; i++){
+		row = m_transformation_matrix[i];
+		std::cout << row.x << " " << row.y << " " << row.z << " " << row.w << std::endl;
+	}
+	std::cout << "End matrix" << std::endl;
+}
+
 
 
 

@@ -67,6 +67,9 @@ void InputManager::handleKeyPresses(SDL_Event event) {
 	case SDLK_SPACE:
 		m_keys_set.insert("SPACE");
 		break;
+	case SDLK_LCTRL:
+		m_keys_set.insert("LCTRL");
+		break;
 	default:
 		break;
 	}

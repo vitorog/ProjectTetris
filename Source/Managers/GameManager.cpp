@@ -11,6 +11,8 @@
 #define FRAMES_PER_SECOND 60
 #define DROP_TIME 500
 
+int curr_type = 0;
+
 GameManager* GameManager::m_game_mng = nullptr;
 
 SDL_Event event;
@@ -24,6 +26,8 @@ GameManager::GameManager() {
 
 	m_fps_timer = new Timer();
 	m_drop_timer = new Timer();
+
+	m_curr_piece = nullptr;
 
 }
 
@@ -40,19 +44,14 @@ GameManager::~GameManager() {
 }
 
 void GameManager::run() {
-	GameObject* tetris_piece2 = new TetrisPiece(TETRIS_SQUARE_PIECE, glm::vec3(5.0f,0.0f,0.0f));
-	addGameObj(tetris_piece2);
-
-
-	GameObject* tetris_piece = new TetrisPiece(TETRIS_T_PIECE);
-	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
-	m_curr_piece = tp;
+	GameObject* tetris_piece = new TetrisPiece(TETRIS_SQUARE_PIECE, glm::vec3(5.0f,0.0f,0.0f));
 	addGameObj(tetris_piece);
-	m_drop_timer->start();
 
+	m_drop_timer->start();
 	while(m_running){
 		m_fps_timer->start();
 		input(event);
+
 		logic();
 		render();
 		manageDropPiece();
@@ -61,12 +60,12 @@ void GameManager::run() {
 }
 
 void GameManager::logic() {
-	if(checkCollision()){
-		m_curr_piece->setMaterial(glm::vec3(1.0f,0.0f,0.0f));
-		std::cout << "COLLILDED" << std::endl;
-	}else{
-		m_curr_piece->setMaterial(glm::vec3(0.0f,0.0f,1.0f));
-		std::cout << "NOT COLLILDED" << std::endl;
+	if(m_curr_piece != nullptr){
+		if(checkCollision()){
+			m_curr_piece->setMaterial(glm::vec3(1.0f,0.0f,0.0f));
+		}else{
+			m_curr_piece->setMaterial(glm::vec3(0.0f,0.0f,1.0f));
+		}
 	}
 }
 
@@ -77,26 +76,36 @@ void GameManager::input(SDL_Event event) {
 		return;
 	}
 	m_input_mng->handleInput(event);
-	if(m_input_mng->checkKey("DOWN"))
-	{
-		m_curr_piece->movePiece(DOWN);
-
-	}
-	if(m_input_mng->checkKey("UP"))
+	if(m_curr_piece != nullptr){
+		if(m_input_mng->checkKey("DOWN"))
 		{
-			m_curr_piece->movePiece(UP);
+			m_curr_piece->movePiece(DOWN);
+
 		}
-	if(m_input_mng->checkKey("LEFT"))
+		if(m_input_mng->checkKey("UP"))
+		{
+			//m_curr_piece->movePiece(UP);
+		}
+		if(m_input_mng->checkKey("LEFT"))
 		{
 			m_curr_piece->movePiece(LEFT);
 		}
-	if(m_input_mng->checkKey("RIGHT"))
+		if(m_input_mng->checkKey("RIGHT"))
 		{
 			m_curr_piece->movePiece(RIGHT);
 		}
-	if(m_input_mng->checkKey("SPACE"))
+		if(m_input_mng->checkKey("SPACE"))
+		{
+			m_curr_piece->rotatePiece(RIGHT);
+		}
+	}
+
+	if(m_input_mng->checkKey("LCTRL"))
 	{
-		m_curr_piece->rotatePiece(RIGHT);
+		createTetrisPiece((TetrisPieceType)curr_type);
+		curr_type++;
+		if(curr_type>6)
+			curr_type = 0;
 	}
 
 }
@@ -129,10 +138,13 @@ void GameManager::manageFps() {
 }
 
 void GameManager::manageDropPiece() {
-	if(m_drop_timer->getElapsed() > DROP_TIME){
-		//m_curr_piece->moveDir(DOWN);
-		m_drop_timer->start();
+	if(m_curr_piece != nullptr){
+		if(m_drop_timer->getElapsed() > DROP_TIME){
+			m_curr_piece->movePiece(DOWN);
+			m_drop_timer->start();
+		}
 	}
+
 }
 
 void GameManager::removeGameObj(int id) {
@@ -146,13 +158,27 @@ void GameManager::removeGameObj(int id) {
 }
 
 bool GameManager::checkCollision(){
-	std::list<GameObject*>::iterator it;
-	it = m_game_objs_list.begin();
-	std::advance(it,1);
-	for(; it != m_game_objs_list.end(); it++){
-		if(m_curr_piece->checkCollision((*it))){
-			return true;
+	if(m_curr_piece != nullptr){
+		std::list<GameObject*>::iterator it;
+		it = m_game_objs_list.begin();
+		std::advance(it,1);
+		for(; it != m_game_objs_list.end(); it++){
+			if(m_curr_piece->checkCollision((*it))){
+				return true;
+			}
 		}
 	}
 	return false;
 }
+
+void GameManager::createTetrisPiece(TetrisPieceType type) {
+	if(m_curr_piece != nullptr){
+		removeGameObj(m_curr_piece->getId());
+		delete m_curr_piece;
+	}
+	GameObject* tetris_piece = new TetrisPiece(type,glm::vec3(0.0f,20.0f,0.0f));
+	TetrisPiece* tp = dynamic_cast<TetrisPiece*>(tetris_piece);
+	m_curr_piece = tp;
+	addGameObj(tetris_piece);
+}
+

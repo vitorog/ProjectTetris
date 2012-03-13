@@ -57,7 +57,7 @@ int VideoManager::initGL() {
 	gluPerspective(45.0f, ratio ,0.01f,100.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(10.0f,5.0f,25.0f,10.0f,5.0f,-1.0f,0.0f,1.0f,0.0f);
+	gluLookAt(10.0f,10.0f,30.0f,10.0f,10.0f,-1.0f,0.0f,1.0f,0.0f);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	return 0;
 }

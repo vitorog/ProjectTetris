@@ -37,6 +37,8 @@ private:
 	TetrisPiece* m_curr_piece;
 	bool checkCollision();
 
+	void createTetrisPiece(TetrisPieceType type);
+
 	bool m_running;
 	static GameManager* m_game_mng;
 	VideoManager* m_video_mng;

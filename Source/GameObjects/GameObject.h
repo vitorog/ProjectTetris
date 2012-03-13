@@ -28,6 +28,7 @@ public:
 	bool hasChildren();
 	int getId();
 	ObjectFrame& getFrame();
+	void applyTransformMatrix();
 protected:
 	std::list<GameObject*> m_children;
 	std::map<ComponentType, GameObjComponent*> m_components;

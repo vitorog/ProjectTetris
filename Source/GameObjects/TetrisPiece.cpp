@@ -16,8 +16,10 @@
 
 TetrisPiece::TetrisPiece(TetrisPieceType type, glm::vec3 position) {
 	m_type = type;
-	m_frame.setCenter(position);
+	m_frame.setCenter(glm::vec3());
 	createBlocks();
+	m_frame.translate(position);
+	applyTransformMatrix();
 	m_rotated_angle = 0;
 }
 
@@ -107,51 +109,42 @@ void TetrisPiece::movePiece(TetrisPieceDirection dir) {
 }
 
 void TetrisPiece::rotatePiece(TetrisPieceDirection dir) {
+	std::cout << "Begin rotation" << std::endl;
 	switch(dir){
 		case LEFT:
-			m_rotated_angle += -90.0f;
-			if(m_type <= 3){
-				if(m_rotated_angle < 90.0f){
-					rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
-					m_rotated_angle = 0.0f;
-					break;
-				}
-			}
+//			m_rotated_angle += -90.0f;
+//			if(m_type <= 3){
+//				if(m_rotated_angle < 90.0f){
+//					rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
+//					m_rotated_angle = 0.0f;
+//					break;
+//				}
+//			}
 			rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
 			break;
 		case RIGHT:
-			m_rotated_angle += 90.0f;
-			if(m_type <= 3){
-				if(m_rotated_angle > 90.0f){
-					rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
-					m_rotated_angle = 0.0f;
-					break;
+			if(m_type != TETRIS_SQUARE_PIECE){
+				m_rotated_angle += 90.0f;
+				if(m_type <= 3){
+					if(m_rotated_angle > 90.0f){
+						m_frame.resetRotation();
+						applyTransformMatrix();
+						m_rotated_angle = 0.0f;
+						break;
+					}
 				}
+				rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
 			}
-			rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
 			break;
 		default:
 			break;
 	}
+	std::cout << "End rotation" << std::endl;
 }
 
 void TetrisPiece::move(float x, float y) {
 	m_frame.translate(glm::vec3(x,y,0));
-	CollisionComponent* collision_cmp = nullptr;
-	std::list<GameObject*>::iterator it;
-	TetrisBlock* curr_block = nullptr;
-	for(it = m_children.begin(); it != m_children.end(); it++)
-	{
-		curr_block = dynamic_cast<TetrisBlock*>((*it));
-		if(curr_block != nullptr){
-			curr_block->getFrame().applyTransformation(this->getFrame().getTransformationMatrix());
-			collision_cmp = dynamic_cast<CollisionComponent*>(curr_block->getComponent(COLLISION_COMPONENT));
-			if(collision_cmp != nullptr){
-				collision_cmp->updateBoundingBox();
-			}
-
-		}
-	}
+	applyTransformMatrix();
 }
 
 bool TetrisPiece::checkCollision(GameObject* object)
@@ -205,20 +198,6 @@ TetrisBlock* TetrisPiece::getTetrisBlock(int pos)
 
 void TetrisPiece::rotate(float angle, glm::vec3 axis) {
 	m_frame.rotate(angle,axis);
-	CollisionComponent* collision_cmp = nullptr;
-	std::list<GameObject*>::iterator it;
-	TetrisBlock* curr_block = nullptr;
-	for(it = m_children.begin(); it != m_children.end(); it++)
-	{
-		curr_block = dynamic_cast<TetrisBlock*>((*it));
-		if(curr_block != nullptr){
-			curr_block->getFrame().applyTransformation(this->getFrame().getTransformationMatrix());
-			collision_cmp = dynamic_cast<CollisionComponent*>(curr_block->getComponent(COLLISION_COMPONENT));
-			if(collision_cmp != nullptr){
-				collision_cmp->updateBoundingBox();
-			}
-
-		}
-	}
+	applyTransformMatrix();
 }
 
