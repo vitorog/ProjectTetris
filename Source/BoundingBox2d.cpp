@@ -10,14 +10,15 @@
 BoundingBox2d::~BoundingBox2d() {
 }
 
-void BoundingBox2d::setBoundaries(glm::vec3 center, float size) {
+void BoundingBox2d::setBoundaries(glm::vec3 center, float width, float height) {
 	m_boundaries.clear();
 	m_center = center;
-	float half_size = size/2.0f;
-	glm::vec3 lower_left = glm::vec3(center + glm::vec3(-half_size, -half_size, 0.0f));
-	glm::vec3 lower_right = glm::vec3(center + glm::vec3(half_size, -half_size, 0.0f));
-	glm::vec3 upper_right = glm::vec3(center + glm::vec3(half_size, half_size, 0.0f));
-	glm::vec3 upper_left = glm::vec3(center + glm::vec3(-half_size, half_size, 0.0f));
+	float half_width = width/2.0f;
+	float half_height = height/2.0f;
+	glm::vec3 lower_left = glm::vec3(center + glm::vec3(-half_width, -half_height, 0.0f));
+	glm::vec3 lower_right = glm::vec3(center + glm::vec3(half_width, -half_height, 0.0f));
+	glm::vec3 upper_right = glm::vec3(center + glm::vec3(half_width, half_height, 0.0f));
+	glm::vec3 upper_left = glm::vec3(center + glm::vec3(-half_width, half_height, 0.0f));
 
 	m_boundaries.push_back(lower_left);
 	m_boundaries.push_back(lower_right);

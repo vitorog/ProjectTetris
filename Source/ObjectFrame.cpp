@@ -93,6 +93,13 @@ void ObjectFrame::resetRotation()
 	updateCenter();
 }
 
+void ObjectFrame::resetTranslation()
+{
+	m_translation_matrix = glm::mat4();
+	updateTransformationMatrix();
+	updateCenter();
+}
+
 void ObjectFrame::updateTransformationMatrix() {
 	m_transformation_matrix = m_translation_matrix * m_rotation_matrix;
 }

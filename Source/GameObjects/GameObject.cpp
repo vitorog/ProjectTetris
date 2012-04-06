@@ -75,8 +75,9 @@ void GameObject::render() {
 			if(m_components.find(MATERIAL_COMPONENT) != m_components.end()){
 				MaterialComponent* material_cmp = dynamic_cast<MaterialComponent*>(m_components[MATERIAL_COMPONENT]);
 				renderer_cmp->render(this->m_frame,mesh_cmp, material_cmp);
+			}else{
+				renderer_cmp->render(this->m_frame,mesh_cmp);
 			}
-			renderer_cmp->render(this->m_frame,mesh_cmp);
 		}
 	}
 	glPopMatrix();
@@ -109,6 +110,11 @@ void GameObject::applyTransformMatrix() {
 	CollisionComponent* collision_cmp = nullptr;
 	std::list<GameObject*>::iterator it;
 	GameObject* curr_obj = nullptr;
+
+	collision_cmp = dynamic_cast<CollisionComponent*>(getComponent(COLLISION_COMPONENT));
+	if(collision_cmp != nullptr){
+		collision_cmp->updateBoundingBox();
+	}
 	for(it = m_children.begin(); it != m_children.end(); it++)
 	{
 		curr_obj = (*it);
@@ -118,9 +124,25 @@ void GameObject::applyTransformMatrix() {
 			if(collision_cmp != nullptr){
 				collision_cmp->updateBoundingBox();
 			}
-
 		}
 	}
+}
+
+void GameObject::setPosition(glm::vec3 position)
+{
+	m_frame.resetTranslation();
+	m_frame.translate(position);
+	applyTransformMatrix();
+}
+
+void GameObject::move(float x, float y) {
+	m_frame.translate(glm::vec3(x,y,0));
+	applyTransformMatrix();
+}
+
+void GameObject::rotate(float angle, glm::vec3 axis) {
+	m_frame.rotate(angle,axis);
+	applyTransformMatrix();
 }
 
 

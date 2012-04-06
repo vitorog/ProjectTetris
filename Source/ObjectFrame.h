@@ -26,6 +26,7 @@ public:
 	void translate(glm::vec3 direction);
 	void rotate(float angle, glm::vec3 axis);
 	void resetRotation();
+	void resetTranslation();
 private:
 	void updateTransformationMatrix();
 	void updateCenter();

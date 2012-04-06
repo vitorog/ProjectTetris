@@ -8,9 +8,6 @@
 #ifndef BOUNDINGBOX2D_H_
 #define BOUNDINGBOX2D_H_
 
-#define BOUNDING_BOX_SIZE 1.0f
-
-
 #include "utils.h"
 
 typedef enum BoundaryPoint_t{ LOWER_LEFT = 0, LOWER_RIGHT, UPPER_RIGHT, UPPER_LEFT }BoundaryPoint;
@@ -20,7 +17,7 @@ class BoundingBox2d
 public:
 		BoundingBox2d() = default;
 		virtual ~BoundingBox2d();
-		void setBoundaries(glm::vec3 center, float size = BOUNDING_BOX_SIZE);
+		void setBoundaries(glm::vec3 center, float width, float height);
 		bool isPointInside(glm::vec3 point);
 		glm::vec3 getCenter();
 		glm::vec3 getBorderPoint(int pos);

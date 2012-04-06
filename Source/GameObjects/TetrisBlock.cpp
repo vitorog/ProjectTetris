@@ -9,13 +9,13 @@
 
 TetrisBlock::TetrisBlock(glm::vec3 position, float size) {
 	m_frame.setCenter(position);
-	CollisionComponent* collision = new CollisionComponent(&m_frame);
+	GameObjComponent* collision = new CollisionComponent(&m_frame);
 	addComponent(collision);
 
-	RendererComponent* renderer = new RendererComponent();
+	GameObjComponent* renderer = new RendererComponent();
 	addComponent(renderer);
 
-	MeshComponent* mesh = new MeshComponent();
+	GameObjComponent* mesh = new MeshComponent();
 	addComponent(mesh);
 
 	float hsize = size/2;
@@ -37,13 +37,13 @@ TetrisBlock::TetrisBlock(glm::vec3 position, float size) {
 	v4.y += hsize;
 
 	std::vector<glm::vec3> vertices = { v1, v2, v3, v4 };
-	mesh->setMesh(vertices);
+	dynamic_cast<MeshComponent*>(mesh)->setMesh(vertices);
 
 	glm::vec3 color;
-	color.x = 128;
-	color.y = 0;
-	color.z = 128;
-	MaterialComponent* material = new MaterialComponent(color);
+	color.x = 1.0f;
+	color.y = 0.0f;
+	color.z = 0.0f;
+	GameObjComponent* material = new MaterialComponent(color);
 	addComponent(material);
 }
 

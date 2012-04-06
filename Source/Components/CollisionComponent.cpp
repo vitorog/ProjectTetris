@@ -11,9 +11,11 @@
 #include "../GameObjects/GameObject.h"
 #include "../ObjectFrame.h"
 
-CollisionComponent::CollisionComponent(ObjectFrame *frame){
+CollisionComponent::CollisionComponent(ObjectFrame *frame, float width, float height){
+	m_bbox_width = width;
+	m_bbox_height = height;
 	m_obj_frame = frame;
-	m_bounding_box.setBoundaries(frame->getCenter(),1.0f);
+	m_bounding_box.setBoundaries(frame->getCenter(), m_bbox_width, m_bbox_height);
 }
 
 CollisionComponent::~CollisionComponent() {
@@ -41,12 +43,20 @@ bool CollisionComponent::checkCollision(GameObject* object) {
 }
 
 void CollisionComponent::updateBoundingBox(){
-	m_bounding_box.setBoundaries(m_obj_frame->getCenter());
+	m_bounding_box.setBoundaries(m_obj_frame->getCenter(), m_bbox_width, m_bbox_height);
 }
 
 BoundingBox2d* CollisionComponent::getBoundingBox() {
 	return &m_bounding_box;
 }
+
+void CollisionComponent::resizeBoundingBox(float width, float height)
+{
+	m_bbox_width = width;
+	m_bbox_height = height;
+	updateBoundingBox();
+}
+
 
 
 

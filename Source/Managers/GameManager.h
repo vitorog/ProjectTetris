@@ -27,6 +27,7 @@ public:
 	static GameManager* getInstance();
 private:
 	GameManager();
+	void setup();
 	void logic();
 	void input(SDL_Event event);
 	void render();
@@ -34,11 +35,14 @@ private:
 	void manageDropPiece();
 	void addGameObj(GameObject* obj);
 	void removeGameObj(int id);
+	void generatePiece();
+	void createBorders(int pos);
 	TetrisPiece* m_curr_piece;
+	TetrisPiece* m_preview_piece;
 	bool checkCollision();
+	TetrisPiece* createTetrisPiece(TetrisPieceType type);
 
-	void createTetrisPiece(TetrisPieceType type);
-
+	int m_next_piece_type;
 	bool m_running;
 	static GameManager* m_game_mng;
 	VideoManager* m_video_mng;

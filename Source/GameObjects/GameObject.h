@@ -29,6 +29,9 @@ public:
 	int getId();
 	ObjectFrame& getFrame();
 	void applyTransformMatrix();
+	void setPosition(glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
+	void move(float x, float y);
+	void rotate(float angle, glm::vec3 axis);
 protected:
 	std::list<GameObject*> m_children;
 	std::map<ComponentType, GameObjComponent*> m_components;

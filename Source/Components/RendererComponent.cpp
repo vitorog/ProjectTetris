@@ -32,12 +32,14 @@ void RendererComponent::render(const ObjectFrame& frame, MeshComponent* mesh, Ma
 //	glEnd();
 
 
+	vertices = mesh->getVertices();
 	glBegin(GL_QUADS);
 	if(material != nullptr){
 		glm::vec3 color = material->getColor();
 		glColor3f(color.r,color.g,color.b);
+	}else{
+		glColor3f(1.0f,1.0f,1.0f);
 	}
-	vertices = mesh->getVertices();
 	for(verts_it = vertices.begin(); verts_it != vertices.end(); verts_it++){
 		glVertex3f((*verts_it).x,(*verts_it).y,(*verts_it).z);
 	}

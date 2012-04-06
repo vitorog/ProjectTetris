@@ -38,18 +38,21 @@ class TetrisPiece : public GameObject {
 public:
 	TetrisPiece(TetrisPieceType type, glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
 	virtual ~TetrisPiece();
+
+	int getPreviousMoveType();
 	void createBlocks();
 	void movePiece(TetrisPieceDirection dir);
+	void undoMovement();
+	void undoRotation();
 	void rotatePiece(TetrisPieceDirection dir);
 	bool checkCollision(GameObject* object);
 	void setMaterial(glm::vec3 test);
 	TetrisBlock* getTetrisBlock(int pos);
 private:
-	void move(float x, float y);
-	void rotate(float angle, glm::vec3 axis);
 	int m_type;
+	int m_previous_mov;
+	int m_previous_move_type;
 	float m_rotated_angle;
-
 };
 
 #endif /* TETRISPIECE_H_ */
