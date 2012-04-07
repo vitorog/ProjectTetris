@@ -42,7 +42,6 @@ void ObjectFrame::translate(glm::vec3 direction) {
 	m_translation_matrix = glm::translate(m_translation_matrix,direction);
 	updateTransformationMatrix();
 	updateCenter();
-
 }
 
 void ObjectFrame::rotate(float angle, glm::vec3 axis) {

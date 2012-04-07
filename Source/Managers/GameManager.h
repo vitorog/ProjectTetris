@@ -34,9 +34,12 @@ private:
 	void manageFps();
 	void manageDropPiece();
 	void addGameObj(GameObject* obj);
-	void removeGameObj(int id);
+	void removeGameObj(GameObject* obj);
 	void generatePiece();
 	void createBorders(int pos);
+	void checkTetrisLines();
+	void clearLine(unsigned int line);
+	void dropLine(unsigned int line);
 	TetrisPiece* m_curr_piece;
 	TetrisPiece* m_preview_piece;
 	bool checkCollision();
@@ -50,6 +53,7 @@ private:
 	Timer* m_fps_timer;
 	Timer* m_drop_timer;
 	std::list<GameObject*> m_game_objs_list;
+	std::vector<std::vector<TetrisBlock*>> m_tetris_blocks;
 };
 
 #endif /* GAMEMANAGER_H_ */

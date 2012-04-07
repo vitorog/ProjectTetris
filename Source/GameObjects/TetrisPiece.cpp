@@ -85,7 +85,7 @@ void TetrisPiece::createBlocks() {
 		break;
 	}
 	for(unsigned int i = 0; i < 4; i++){
-		TetrisBlock* new_block = new TetrisBlock(position[i]);
+		GameObject* new_block = new TetrisBlock(position[i]);
 		m_children.push_back(new_block);
 	}
 }
@@ -111,22 +111,24 @@ void TetrisPiece::movePiece(TetrisPieceDirection dir) {
 	default:
 		break;
 	}
-	m_previous_move_type = 1;
 }
 
 void TetrisPiece::rotatePiece(TetrisPieceDirection dir) {
-	std::cout << "Begin rotation" << std::endl;
 	switch(dir){
 		case LEFT:
-			m_rotated_angle += -90.0f;
-			if(m_type <= 3){
-				if(m_rotated_angle < 90.0f){
-					rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
-					m_rotated_angle = 0.0f;
-					break;
-				}
+			if(m_type != TETRIS_SQUARE_PIECE){
+//				m_rotated_angle -= 90.0f;
+//				if(m_type <= 3){
+//					if(m_rotated_angle < -90.0f){
+//						m_frame.resetRotation();
+//						applyTransformMatrix();
+//						m_rotated_angle = 0.0f;
+//						break;
+//					}
+//				}
+				rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
 			}
-			rotate(-90.0f,glm::vec3(0.0f,0.0f,1.0f));
+
 			break;
 		case RIGHT:
 			if(m_type != TETRIS_SQUARE_PIECE){
@@ -140,12 +142,12 @@ void TetrisPiece::rotatePiece(TetrisPieceDirection dir) {
 					}
 				}
 				rotate(90.0f,glm::vec3(0.0f,0.0f,1.0f));
+				m_previous_rot = RIGHT;
 			}
 			break;
 		default:
 			break;
 	}
-	m_previous_move_type = 2;
 }
 
 
@@ -197,13 +199,16 @@ void TetrisPiece::setMaterial(glm::vec3 test)
 
 void TetrisPiece::undoRotation()
 {
-	rotatePiece(LEFT);
+	switch(m_previous_rot){
+	case RIGHT:
+		rotatePiece(LEFT);
+		break;
+	default:
+		break;
+	}
+	m_previous_rot = -1;
 }
 
-int TetrisPiece::getPreviousMoveType()
-{
-	return m_previous_move_type;
-}
 
 TetrisBlock* TetrisPiece::getTetrisBlock(int pos)
 {
@@ -219,6 +224,7 @@ TetrisBlock* TetrisPiece::getTetrisBlock(int pos)
 	}
 	return nullptr;
 }
+
 
 void TetrisPiece::undoMovement()
 {
@@ -238,6 +244,7 @@ void TetrisPiece::undoMovement()
 		default:
 			break;
 	}
+	m_previous_mov = -1;
 }
 
 

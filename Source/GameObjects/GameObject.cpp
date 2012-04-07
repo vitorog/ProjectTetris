@@ -31,10 +31,12 @@ GameObject::~GameObject() {
 	//Delete components
 	std::map<ComponentType, GameObjComponent*>::iterator component_it;
 	GameObjComponent* curr_component = nullptr;
-	for(component_it = m_components.begin(); component_it != m_components.end(); component_it++){
+	component_it = m_components.begin();
+	while(!m_components.empty()){
 		curr_component = (*component_it).second;
 		m_components.erase(component_it);
 		delete curr_component;
+		component_it = m_components.begin();
 	}
 }
 
@@ -144,6 +146,12 @@ void GameObject::rotate(float angle, glm::vec3 axis) {
 	m_frame.rotate(angle,axis);
 	applyTransformMatrix();
 }
+
+void GameObject::clearChildren()
+{
+	m_children.clear();
+}
+
 
 
 

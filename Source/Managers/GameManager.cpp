@@ -29,9 +29,13 @@ GameManager::GameManager() {
 	m_preview_piece = nullptr;
 
 	srand(time(NULL));
-	m_next_piece_type = 0;
+	m_next_piece_type = rand() % 7;
 
-
+	m_tetris_blocks.resize(20);
+	std::vector<std::vector<TetrisBlock*>>::iterator it;
+	for(it = m_tetris_blocks.begin(); it != m_tetris_blocks.end(); it++){
+		(*it).resize(10,nullptr);
+	}
 }
 
 GameManager::~GameManager() {
@@ -72,6 +76,7 @@ void GameManager::logic() {
 		}
 	}
 	manageDropPiece();
+	checkTetrisLines();
 }
 
 void GameManager::input(SDL_Event event) {
@@ -89,6 +94,7 @@ void GameManager::input(SDL_Event event) {
 		if(m_input_mng->checkKey("UP"))
 		{
 //			m_curr_piece->movePiece(UP);
+			m_curr_piece->rotatePiece(LEFT);
 		}
 		if(m_input_mng->checkKey("LEFT"))
 		{
@@ -143,6 +149,26 @@ void GameManager::manageDropPiece() {
 			m_curr_piece->movePiece(DOWN);
 			if(checkCollision()){
 				m_curr_piece->undoMovement();
+				TetrisBlock* curr_block;
+				int row;
+				int column;
+				for(int i = 0; i < 4; i++){
+					curr_block = m_curr_piece->getTetrisBlock(i);
+					column = curr_block->getFrame().getCenter().x;
+					row = curr_block->getFrame().getCenter().y;
+					curr_block->getFrame().resetTranslation();
+					curr_block->getFrame().setCenter(glm::vec3(column,row,0.0f));
+					row = row -1;
+					column = column + 5;
+					if((row < 20)){
+						m_tetris_blocks[row][column] = curr_block;
+					}
+					addGameObj(dynamic_cast<GameObject*>(curr_block));
+					std::cout << "center x: " << column << std::endl;
+					std::cout << "center y: " << row << std::endl;
+				}
+				m_curr_piece->clearChildren();
+				removeGameObj(m_curr_piece);
 				generatePiece();
 			}
 			m_drop_timer->start();
@@ -150,10 +176,10 @@ void GameManager::manageDropPiece() {
 	}
 }
 
-void GameManager::removeGameObj(int id) {
+void GameManager::removeGameObj(GameObject *obj) {
 	std::list<GameObject*>::iterator it;
 	for(it = m_game_objs_list.begin(); it != m_game_objs_list.end(); it++){
-		if((*it)->getId() == id){
+		if(obj == (*it)){
 			m_game_objs_list.erase(it);
 			return;
 		}
@@ -202,6 +228,7 @@ void GameManager::generatePiece()
 		break;
 	}
 	if(m_preview_piece == nullptr){
+		m_next_piece_type = TETRIS_LINE_PIECE;
 		m_curr_piece = createTetrisPiece(TetrisPieceType(m_next_piece_type));
 		m_curr_piece->setMaterial(color);
 		addGameObj(m_curr_piece);
@@ -209,7 +236,9 @@ void GameManager::generatePiece()
 		m_curr_piece = m_preview_piece;
 	}
 	m_curr_piece->setPosition(glm::vec3(0.0f,20.0f,0.0f));
-
+	if(checkCollision()){
+		std::cout << "GAME OVER" << std::endl;
+	}
 	color_id = rand()%6;
 	switch(color_id){
 		case 0:
@@ -232,6 +261,7 @@ void GameManager::generatePiece()
 			break;
 	}
 	m_next_piece_type = rand() % 7;
+	m_next_piece_type = TETRIS_LINE_PIECE;
 	m_preview_piece = createTetrisPiece(TetrisPieceType(m_next_piece_type));
 	m_preview_piece->setPosition(glm::vec3(10.0f,15.0f,0.0f));
 	m_preview_piece->setMaterial(color);
@@ -285,6 +315,67 @@ void GameManager::createBorders(int pos)
 }
 
 
+
+void GameManager::checkTetrisLines()
+{
+	int block_count;
+	for(int i = 0; i < 20; i++){
+		block_count = 0;
+		for(int j = 0; j < 10; j++){
+			if(m_tetris_blocks[i][j] != nullptr){
+				block_count++;
+			}else{
+				break;
+			}
+		}
+		if(block_count == 10){
+			clearLine(i);
+			dropLine(i+1);
+			i--;
+		}
+	}
+//	for(int i = 19; i >= 0; i--){
+//		for(int j = 0; j < 10; j++){
+//			if(m_tetris_blocks[i][j] != nullptr){
+//				std::cout << " 1 " << " ";
+//			}else{
+//				std::cout << " 0 " << " ";
+//			}
+//		}
+//		std::cout << std::endl;
+//	}
+//	std::cout << std::endl;
+}
+
+void GameManager::clearLine(unsigned int line)
+{
+	TetrisBlock* block = nullptr;
+	for(int i = 0; i < 10; i++){
+		block = m_tetris_blocks[line][i];
+		if(block != nullptr){
+			removeGameObj(block);
+			delete block;
+		}
+	}
+	m_tetris_blocks[line].clear();
+	m_tetris_blocks[line].resize(10,nullptr);
+}
+
+void GameManager::dropLine(unsigned int line)
+{
+	TetrisBlock* block = nullptr;
+	for(int i = line; i < 20; i++){
+		for(int j = 0; j < 10; j++){
+			block = m_tetris_blocks[i][j];
+			m_tetris_blocks[i-1][j] = block;
+			if(block != nullptr){
+				block->move(0.0f,-1.0f);
+			}
+		}
+		m_tetris_blocks[i].clear();
+		m_tetris_blocks[i].resize(10,nullptr);
+	}
+}
 
 TetrisPiece* GameManager::createTetrisPiece(TetrisPieceType type) {
 	GameObject* tetris_piece = new TetrisPiece(type);

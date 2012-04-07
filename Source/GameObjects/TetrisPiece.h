@@ -39,7 +39,6 @@ public:
 	TetrisPiece(TetrisPieceType type, glm::vec3 position = glm::vec3(0.0f,0.0f,0.0f));
 	virtual ~TetrisPiece();
 
-	int getPreviousMoveType();
 	void createBlocks();
 	void movePiece(TetrisPieceDirection dir);
 	void undoMovement();
@@ -51,7 +50,7 @@ public:
 private:
 	int m_type;
 	int m_previous_mov;
-	int m_previous_move_type;
+	int m_previous_rot;
 	float m_rotated_angle;
 };
 

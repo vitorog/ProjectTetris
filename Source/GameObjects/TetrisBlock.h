@@ -15,7 +15,6 @@ public:
 	TetrisBlock(glm::vec3 position, float size = 1.0f);
 	virtual ~TetrisBlock();
 	bool checkCollision(GameObject* block);
-
 };
 
 #endif /* TETRISBLOCK_H_ */
