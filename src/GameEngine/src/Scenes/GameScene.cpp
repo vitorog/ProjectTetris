@@ -1,0 +1,41 @@
+/*
+ * GameScene.cpp
+ *
+ *  Created on: 08/04/2012
+ *      Author: Vitor
+ */
+
+#include "GameScene.h"
+
+#include "GameObjects/GameObject.h"
+
+
+unsigned int GameScene::m_id = 0;
+
+GameScene::GameScene() {
+}
+
+GameScene::~GameScene() {
+
+}
+
+void GameScene::addGameObj(GameObject* obj) {
+		m_game_objs_list.push_back(obj);
+}
+
+void GameScene::removeGameObj(GameObject *obj) {
+	std::list<GameObject*>::iterator it;
+	for(it = m_game_objs_list.begin(); it != m_game_objs_list.end(); it++){
+		if(obj == (*it)){
+			m_game_objs_list.erase(it);
+			return;
+		}
+	}
+}
+
+bool GameScene::checkRunning()
+{
+	return m_running;
+}
+
+
