@@ -17,10 +17,10 @@ class GameScene {
 public:
 	GameScene();
 	virtual ~GameScene();
-	virtual void setup() = 0;
-	virtual void run() = 0;
+	virtual void setup();
+	virtual void run();
 	virtual void logic() = 0;
-	virtual void input() = 0;
+	virtual void input();
 	virtual void render() = 0;
 	void addGameObj(GameObject* obj);
 	void removeGameObj(GameObject* obj);

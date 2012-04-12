@@ -120,7 +120,6 @@ void TetrisGameScene::input()
 
 
 void TetrisGameScene::render() {
-
 	std::list<GameObject*>::iterator it;
 	for(it = m_game_objs_list.begin(); it != m_game_objs_list.end(); it++){
 		(*it)->render();

@@ -8,11 +8,13 @@
 #include "GameScene.h"
 
 #include "GameObjects/GameObject.h"
+#include "Core/InputManager.h"
 
 
 unsigned int GameScene::m_id = 0;
 
 GameScene::GameScene() {
+	m_input_mng = InputManager::getInstance();
 }
 
 GameScene::~GameScene() {
@@ -31,6 +33,18 @@ void GameScene::removeGameObj(GameObject *obj) {
 			return;
 		}
 	}
+}
+
+void GameScene::setup() {
+	m_running = true;
+}
+
+void GameScene::run() {
+	input();
+}
+
+void GameScene::input() {
+	m_input_mng->handleInput(input_event);
 }
 
 bool GameScene::checkRunning()

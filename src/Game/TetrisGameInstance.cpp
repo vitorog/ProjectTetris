@@ -8,6 +8,7 @@
 #include "TetrisGameInstance.h"
 
 #include "TetrisGameScene.h"
+#include "TestScene.h"
 
 TetrisGameInstance::TetrisGameInstance() {
 	m_scene_manager = SceneManager::getInstance();
@@ -27,8 +28,10 @@ void TetrisGameInstance::start() {
 }
 
 void TetrisGameInstance::loadScenes() {
-	TetrisGameScene *tetris_game_scene = new TetrisGameScene();
-	m_scene_manager->addScene(tetris_game_scene);
+//	TetrisGameScene *tetris_game_scene = new TetrisGameScene();
+//	m_scene_manager->addScene(tetris_game_scene);
+	TestScene *test_scene = new TestScene();
+	m_scene_manager->addScene(test_scene);
 }
 
 
